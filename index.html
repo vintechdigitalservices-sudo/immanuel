@@ -971,7 +971,7 @@ ul{margin:0;padding:0;list-style:none}
 
       <article class="project anim-slideright">
         <div class="project__media">
-          <img src="images/original-concert.jpg" alt="Original Concert website screenshot" loading="lazy">
+          <img src="images/original.jpg" alt="Original Concert website screenshot" loading="lazy">
         </div>
         <div class="project__body">
           <div class="project__tags">
@@ -1115,7 +1115,7 @@ ul{margin:0;padding:0;list-style:none}
         <img src="images/wecare-logo.jpg" alt="WeCare Nursing Services logo">
         <img src="images/under45.png" alt="Under45 CEOs logo">
         <img src="images/original-concert.png" alt="Original Concert logo">
-         <img src="images/allied-medical.png" alt="Original Concert logo">
+        <img src="images/allied-medical.png" alt="Allied Medical logo">
       </div>
       <div class="marquee__track">
         <img src="images/uduf-logo.webp" alt="" aria-hidden="true">
@@ -1123,6 +1123,7 @@ ul{margin:0;padding:0;list-style:none}
         <img src="images/wecare-logo.jpg" alt="" aria-hidden="true">
         <img src="images/under45.png" alt="" aria-hidden="true">
         <img src="images/original-concert.png" alt="" aria-hidden="true">
+        <img src="images/allied-medical.png" alt="" aria-hidden="true">
       </div>
     </div>
   </div>
@@ -1218,28 +1219,90 @@ ul{margin:0;padding:0;list-style:none}
     nav.style.background = window.scrollY > 40 ? 'rgba(2,8,23,.9)' : 'rgba(2,8,23,.65)';
   }, { passive: true });
 
-  /* ---------- Hero code typing animation ---------- */
+  /* ---------- Hero code typing animation (cycles through all stacks) ---------- */
   var codeTarget = document.getElementById('codeTarget');
-  var codeLines = [
-    '<span class="c-key">class</span> <span class="c-cls">Developer</span>:',
-    '',
-    '    stack = [',
-    '        <span class="c-str">"Python"</span>,',
-    '        <span class="c-str">"Django"</span>,',
-    '        <span class="c-str">"React"</span>,',
-    '        <span class="c-str">"PostgreSQL"</span>',
-    '    ]',
-    '',
-    '    <span class="c-key">def</span> <span class="c-fn">build</span>():',
-    '        <span class="c-key">return</span> <span class="c-str">"Scalable Solutions"</span>'
+
+  var codeSections = [
+    [
+      '<span class="c-key">class</span> <span class="c-cls">Developer</span>:',
+      '',
+      '    stack = [',
+      '        <span class="c-str">"Python"</span>,',
+      '        <span class="c-str">"Django"</span>,',
+      '        <span class="c-str">"React"</span>,',
+      '        <span class="c-str">"PostgreSQL"</span>',
+      '    ]',
+      '',
+      '    <span class="c-key">def</span> <span class="c-fn">build</span>():',
+      '        <span class="c-key">return</span> <span class="c-str">"Scalable Solutions"</span>'
+    ],
+    [
+      '<span class="c-key">class</span> <span class="c-cls">Frontend</span>:',
+      '',
+      '    stack = [',
+      '        <span class="c-str">"React"</span>,',
+      '        <span class="c-str">"Bootstrap"</span>,',
+      '        <span class="c-str">"HTML5"</span>,',
+      '        <span class="c-str">"CSS3"</span>,',
+      '        <span class="c-str">"JavaScript"</span>',
+      '    ]',
+      '',
+      '    <span class="c-key">def</span> <span class="c-fn">render</span>():',
+      '        <span class="c-key">return</span> <span class="c-str">"Pixel-Perfect UI"</span>'
+    ],
+    [
+      '<span class="c-key">class</span> <span class="c-cls">Backend</span>:',
+      '',
+      '    stack = [',
+      '        <span class="c-str">"Django"</span>,',
+      '        <span class="c-str">"Python"</span>,',
+      '        <span class="c-str">"Node.js"</span>,',
+      '        <span class="c-str">"REST APIs"</span>',
+      '    ]',
+      '',
+      '    <span class="c-key">def</span> <span class="c-fn">serve</span>():',
+      '        <span class="c-key">return</span> <span class="c-str">"Secure Endpoints"</span>'
+    ],
+    [
+      '<span class="c-key">class</span> <span class="c-cls">Database</span>:',
+      '',
+      '    stack = [',
+      '        <span class="c-str">"PostgreSQL"</span>,',
+      '        <span class="c-str">"MySQL"</span>,',
+      '        <span class="c-str">"SQLite"</span>,',
+      '        <span class="c-str">"Firebase"</span>,',
+      '        <span class="c-str">"Docker"</span>',
+      '    ]',
+      '',
+      '    <span class="c-key">def</span> <span class="c-fn">store</span>():',
+      '        <span class="c-key">return</span> <span class="c-str">"Reliable Data"</span>'
+    ],
+    [
+      '<span class="c-key">class</span> <span class="c-cls">Tools</span>:',
+      '',
+      '    stack = [',
+      '        <span class="c-str">"Git"</span>,',
+      '        <span class="c-str">"GitHub"</span>,',
+      '        <span class="c-str">"VS Code"</span>,',
+      '        <span class="c-str">"Vercel"</span>,',
+      '        <span class="c-str">"Cloudinary"</span>',
+      '    ]',
+      '',
+      '    <span class="c-key">def</span> <span class="c-fn">ship</span>():',
+      '        <span class="c-key">return</span> <span class="c-str">"Production Ready"</span>'
+    ]
   ];
 
-  function typeCode() {
-    if (!codeTarget) return;
+  var sectionIndex = 0;
+
+  function typeLines(lines, done) {
     var lineIdx = 0, charIdx = 0, current = '';
     function step() {
-      if (lineIdx >= codeLines.length) return;
-      var line = codeLines[lineIdx];
+      if (lineIdx >= lines.length) {
+        if (done) done();
+        return;
+      }
+      var line = lines[lineIdx];
       if (charIdx < line.length) {
         if (line.charAt(charIdx) === '<') {
           var end = line.indexOf('>', charIdx);
@@ -1257,7 +1320,51 @@ ul{margin:0;padding:0;list-style:none}
     }
     step();
   }
-  typeCode();
+
+  function eraseLines(done) {
+    function step() {
+      var current = codeTarget.innerHTML;
+      if (current.length <= 1) {
+        codeTarget.innerHTML = '';
+        if (done) done();
+        return;
+      }
+      // Remove last char (handles tags safely because we look for last '<')
+      var lastOpen = current.lastIndexOf('<');
+      var lastClose = current.lastIndexOf('>');
+      if (lastOpen !== -1 && lastOpen > lastClose) {
+        // Inside a tag - remove whole tag from lastOpen back
+        current = current.slice(0, lastOpen);
+      } else if (lastClose !== -1) {
+        // Check if we're right after a tag — remove the whole tag
+        var prevOpen = current.lastIndexOf('<', lastClose - 1);
+        if (prevOpen !== -1 && current.slice(prevOpen, lastClose + 1).indexOf('<') === 0) {
+          // only pop char if not the full tag
+          current = current.slice(0, -1);
+        } else {
+          current = current.slice(0, -1);
+        }
+      } else {
+        current = current.slice(0, -1);
+      }
+      codeTarget.innerHTML = current;
+      setTimeout(step, 6);
+    }
+    step();
+  }
+
+  function runCycle() {
+    typeLines(codeSections[sectionIndex], function () {
+      setTimeout(function () {
+        eraseLines(function () {
+          sectionIndex = (sectionIndex + 1) % codeSections.length;
+          runCycle();
+        });
+      }, 2000);
+    });
+  }
+
+  if (codeTarget) runCycle();
 
   /* ---------- Scroll reveal ---------- */
   var revealSelectors = '.anim-fadeup,.anim-pop,.anim-flip,.anim-slideleft,.anim-slideright,.anim-zoom,.anim-glow,.anim-riseup';
